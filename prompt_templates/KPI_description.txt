@@ -1,0 +1,166 @@
+These KPIs are based on aggregate calculations across multiple rows. These calculations are meaningful only after the data is grouped by a relevant dimension (e.g., customer, month, or year).
+📌 Important Instructions:
+-Always group the data first by the correct column(s) based on the user question (e.g., SHIP_TO_NAME, GROWTH_SEGMENTS, CUSTOMER_NAME for customer-level KPIs, or Month for monthly trends).
+-Then, apply the KPI formula within each group using .groupby(...).agg(...) or .apply(...)
+-Do not compute aggregate KPIs directly on the full DataFrame unless the user question explicitly asks for an overall summary.
+
+🔍 Example: For Full Shippers %
+Correct Code:
+result_df = df.groupby('SHIP_TO_NAME').apply(
+    lambda g: g['FS_UNITS'].sum() / g['ORDERED_QTY'].sum() if g['ORDERED_QTY'].sum() > 0 else 0
+).reset_index(name='Full Shippers %')
+
+Incorrect Code:
+df['Full Shippers %'] = df['FS_UNITS'].sum() / df['ORDERED_QTY'].sum()
+result_df = df.groupby('SHIP_TO_NAME').agg({'Full Shippers %': 'sum'})
+
+Transactional KPI - Transactional KPIs are dynamic performance indicators that change frequently over time, often based on individual transactions, orders in the logistics system.
+Here is a list of Transactional KPIs, formula required to calculate and their description in json format:
+[
+  {{
+    "KPI Name": "Sales",
+    "Formula": "df['SALES'].sum()",
+    "Description": "Total sales revenue. Use .sum() to aggregate. Ensure SALES is numeric and non-null."
+  }},
+  {{
+    "KPI Name": "Transport Cost",
+    "Formula": "df['TRANSPORT_COST'].sum()",
+    "Description": "Total logistics transport cost. Aggregate using .sum()."
+  }},
+  {{
+    "KPI Name": "% Cost on Sales",
+    "Formula": "df['TRANSPORT_COST'].sum() / df['SALES'].sum()",
+    "Description": "This metric can be interpreted as: For every dollar(or unit) of sales, what fraction is spent on transport. Ensure sales ≠ 0 to avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Transport cost %ge",
+    "Formula": "df['TRANSPORT_COST'].sum() / df['SALES'].sum()",
+    "Description": "This is same as % Cost on Sales. This metric can be interpreted as: For every dollar(or unit) of sales, what fraction is spent on transport. Ensure sales ≠ 0 to avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Per Pallet Cost or Cost Per Pallet",
+    "Formula": "df['TRANSPORT_COST'].sum() / df['PALLET_DISTRIBUTION'].sum()",
+    "Description": "This is used when user is asking about cost per pallet which is interpreted as Total Transportaion cost divided by pallet PALLET_DISTRIBUTION
+                    .Please aggregate at necessary entity level based on question. Ensure total pallets > 0 before dividing."
+  }},
+  {{
+    "KPI Name": "Sales per Pallet or per Pallet Sales",
+    "Formula": "df['SALES'].sum() / df['PALLET_DISTRIBUTION'].sum()",
+    "Description": "Revenue/Sales earned per pallet. Handle zero pallets cautiously."
+  }},
+  {{
+    "KPI Name": "Average Shipment Frequency per Week or Shipment Freq per Week",
+    "Formula": "df['ORDER_ID'].nunique() / df['year_week'].nunique()",
+    "Description": "Weekly shipment rate. Count unique orders and divide by number of weeks for each year. Use this python code to create weeks column, df['year_week'] = df['DELIVERY_DATE'].dt.strftime('%Y-%U')"
+  }},
+  {{
+    "KPI Name": "Average Pallet per Order or Pallet per Order",
+    "Formula": "df['PALLET_DISTRIBUTION'].sum() / df['ORDER_ID'].nunique()",
+    "Description": "It is the ratio of total 'PALLET_DISTRIBUTION' and total unique 'ORDER_ID'. Make sure that Average Pallet per Order is not the average of 'PALLET_DISTRIBUTION'."
+  }},
+  {{
+    "KPI Name": "Total Ship-To Count",
+    "Formula": "df['SHIP_TO_NAME'].nunique()",
+    "Description": "Distinct delivery destinations. Use .nunique()."
+  }},
+  {{
+    "KPI Name": "Total Sold-To Count",
+    "Formula": "df['CUSTOMER_NAME'].nunique()",
+    "Description": "Distinct customers. Use .nunique() on customer identifier."
+  }},
+  {{
+    "KPI Name": "Total Orders",
+    "Formula": "df['ORDER_ID'].nunique()",
+    "Description": "Count of unique orders placed."
+  }},
+  {{
+    "KPI Name": "Fixed Transport Cost",
+    "Formula": "df['FIXED_COST'].sum()",
+    "Description": "Aggregated fixed portion of transport cost. Use this column when question is related to transport cost using fixed rate. This is not warehouse cost. It's a different entity"
+  }},
+  {{
+    "KPI Name": "CO₂ Emissions",
+    "Formula": "sum(df['AVG_DISTANCE']*2) , where df['AVG_DISTANCE'] = df.groupby('ORDER_ID').agg({'DISTANCE':'first'}).reset_index()",
+    "Description": "Total CO₂ emissions from transportation. If question is in customer level or month level then do customer level grouping/month level grouping first before calculating CO2 emission."
+  }},
+  {{
+    "KPI Name": "Cost/Sales Ratio",
+    "Formula": "df['TRANSPORT_COST'].sum() / df['SALES'].sum()",
+    "Description": "Total transport cost as share of total sales. Ensure denominator > 0."
+  }},
+  {{
+    "KPI Name": "Pallets",
+    "Formula": "df['PALLET_DISTRIBUTION'].sum()",
+    "Description": "Total number of pallets. Use .sum() for total."
+  }},
+  {{
+    "KPI Name": "Footprints",
+    "Formula": "df['FOOTPRINT'].sum()",
+    "Description": "Total shipment footprint. Use .sum() to aggregate space used."
+  }},
+  {{
+    "KPI Name": "Per Footprint Cost",
+    "Formula": "df['TRANSPORT_COST'].sum() / df['FOOTPRINT'].sum()",
+    "Description": "Transport cost per unit of footprint. Do not divide if footprint is 0. Do not use this column when question is related to transport cost using fixed rate."
+  }},
+  {{
+    "KPI Name": "Average Footprint per Order or Footprint per Order",
+    "Formula": "df['FOOTPRINT'].sum() / df['ORDER_ID'].nunique()",
+    "Description": "It is ration of total 'FOOTPRINT' and total unique 'ORDER_ID', Average Footprint per Order is not the average of 'FOOTPRINT'."
+  }},
+  {{
+    "KPI Name": "Lines per Order",
+    "Formula": "df['MATERIAL'].count() / df['ORDER_ID'].nunique()",
+    "Description": "Average number of line items per order. Avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Average Distance per Pallet",
+    "Formula": "(df['DISTANCE'] * df['PALLET_DISTRIBUTION']).sum() / df['PALLET_DISTRIBUTION'].sum()",
+    "Description": "Mean distance per pallet shipped. Only divide when total pallets > 0."
+  }},
+  {{
+    "KPI Name": "Full Pallets %",
+    "Formula": "df['FP_UNITS'].sum() / df['ORDERED_QTY'].sum()",
+    "Description": "Portion of ordered units shipped as full pallets. Ensure quantity sum > 0."
+  }},
+  {{
+    "KPI Name": "Average Units per Order or Units per Order",
+    "Formula": "df['ORDERED_QTY'].sum() / df['ORDER_ID'].nunique(dropna = False)",
+    "Description": "It is the ratio of total 'ORDERED_QTY' and total unique 'ORDER_ID', Average Units per Order is not the average of 'ORDERED_QTY'."
+  }},
+  {{
+    "KPI Name": "warehouse Cost",
+    "Formula": "df['WAREHOUSE_COST'].sum()",
+    "Description": "Use this when warehouse cost,Total storage and handling cost are mentioned in the question."
+  }},
+  {{
+    "KPI Name": "Logistic Cost",
+    "Formula": "df['TRANSPORT_COST'].sum() + df['WAREHOUSE_COST'].sum()",
+    "Description": "Total logistics cost (transport + warehouse)."
+  }},
+  {{
+    "KPI Name": "Full Layer %",
+    "Formula": "df['FL_UNITS'].sum() / df['ORDERED_QTY'].sum()",
+    "Description": "Share of units shipped in full pallet layers."
+  }},
+  {{
+    "KPI Name": "Full Shippers %",
+    "Formula": "df['FS_UNITS'].sum() / df['ORDERED_QTY'].sum()",
+    "Description": "Share of units shipped in full shipping containers."
+  }},
+  {{
+    "KPI Name": "Units Picked %",
+    "Formula": "df['UNITS_PICKING'].sum() / df['ORDERED_QTY'].sum()",
+    "Description": "Share of units picked individually (not bulk)."
+  }},
+  {{
+    "KPI Name": "Ordered Quantity",
+    "Formula": "df['ORDERED_QTY'].sum()",
+    "Description": "Total Quantity of items  ordered by customers."
+  }},
+    {{
+    "KPI Name": "Delivered Quantity ",
+    "Formula": "df['DELIVERED_QTY'].sum()",
+    "Description": "Total Quantity of items delivered to the customers."
+  }}
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "agent_name": "Insights Agent",
+        "description": "Insights Agent is responsible for analyzing shipment data and sku master data to generate insights. It handles tasks such as performing exploratory data analysis (EDA), calculating summary statistics, identifying trends, comparing metrics across different dimensions (e.g., users, regions, materials), and generating visualizations to help understand shipment-related/material-related patterns and performance. Insight Agent also responsible for tasks related to material analysis such as material/sku dimensions, pallet,shipper,volume etc. It can also handle Reasoning tasks(why did it happened) such as `why the trend is decreasing?` type of tasks."
+    },
+    {
+        "agent_name": "Dynamic Cost Optimization Agent",
+        "description": "The Dynamic Cost Optimization Agent is responsible for analyzing shipment cost-related data and recommending strategies to reduce or optimize costs. This agent handles tasks such as identifying cost-saving opportunities, calculating the optimal number of trips, performing scenario-based cost optimizations (e.g., varying consolidation windows, truck capacity adjustments), and providing benchmarks and comparisons between current and optimized operations. The agent also calculates key performance metrics like cost per pallet, truck utilization rate, and cost savings over time. This agent is called when the user asks about shipment cost reduction or optimization scenarios. It uses a parameter `shipment_window_range`; which is a key parameter as from this range we identify upto how many days of order do we need to consolidate and deliver together. For ex; `shipment_window_range` of 4 days means that we need to group all the orders from 4 days prior to delivery date and deliver on a single day."
+    },
+    {
+        "agent_name": "Static Cost Optimization Agent",
+        "description": "The Static Cost Optimization Agent is designed to analyze and optimize shipment costs by evaluating (number of days of delivery) scenarios before and after consolidation. Using a Rate Card (which includes product type, short postcode, and cost per pallet), the agent calculates the base shipment costs. To maximize cost savings, the agent evaluates multiple delivery day scenarios (e.g., 5-day, 4-day, or 3-day delivery options). By applying consolidation day mappings, the agent aggregates shipments into fewer deliveries, reducing overall costs. The results include: Total shipment costs before and after consolidation, Percentage savings achieved, Key metrics such as the number of shipments and average pallets per shipment. It uses a parameter `scenario`; which is a key parameter as from this parameter we identify the number of days of delivery user is mentioning. For ex; `scenario` of '4-day delivery' means that we need to deliver orders only 4 days a week. And the agents job is to identify those 4 days of the week."
+    },
+    {
+        "agent_name":"Pallet Utilization Optimization Agent",
+        "description":"Pallet Utilization Optimization Agent is responsible for addressing queries that are related to identifying cost savings by optimizing pallet utilization through better use of pallet specifications. Improve utilization by increasing shipper boxes per layer and adjusting pallet heights.Simulate scenarios to evaluate the impact of higher pallet heights and double stacking, determining additional units per pallet and driving cost reduction through efficient space usage. This agent is called when the user needs any insights on savings one can achieve by optimising pallets utilisation."
+    },
+    {
+        "agent_name":"Drop Point Centralization Optimization Agent",
+        "description": "Drop Point Centralization Optimization Agent is responsible for optimizing the number and location of delivery drop points to reduce transport costs and CO2 emissions. It analyzes delivery data, customer segments, distances, pallet volumes, and transport rates within a given timeframe to identify optimal centralized delivery points. The agent ranks drop points based on volume, transport rate, or distance, simulates order and pallet redistribution, and calculates new transport costs and emissions. It is invoked when the user seeks insights into cost efficiency, sustainability, or operational improvements through centralizing drop points."
+    },
+    {
+        "agent_name": "SELF_RESPONSE",
+        "description": "Use this option when you can directly answer the user's question without specialized data analysis. This is appropriate for: 1. General questions about the system's capabilities, 2. Clarification questions, 3. Simple information requests that don't require data analysis, 4. Explanations of concepts or terms, 5. Help with formulating questions for specialized agents. When selecting this option, you should provide a complete, helpful response to the user's query."
+    }
+]

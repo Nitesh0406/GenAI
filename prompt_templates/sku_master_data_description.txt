@@ -1,0 +1,153 @@
+Here is an example of what one row of the sku master data looks like in json format:
+
+{{
+"SKU_CODE": 5000033129,
+"SKU_DESCRIPTION": "TESCO IBU 200MG CPLT 16",
+"SUPPLIER": "100803433 SHANDONG XINHUA PHARMA 206",
+"LOCATION": "8BP58D1",
+"PACK_CONFIG": "234E6S5L",
+"SHIPMENT_VOLUME": 20096772,
+"ITEMS_PER_PALLET": 7020,
+"ITEMS_PER_SHIPPER": 234,
+"ITEMS_PER_LAYER": 1404,
+"LAYERS_PER_PALLET": 5,
+"SHIPPERS_PER_PALLET": 30,
+"SHIPPERS_PER_LAYER": 6,
+"ITEM_HEIGHT (mm)": 60.0,
+"ITEM_LENGTH (mm)": 23.38,
+"ITEM_WIDTH (mm)": 90.0,
+"SHIPPER_HEIGHT (mm)": 255.0,
+"SHIPPER_LENGTH (mm)": 570.0,
+"SHIPPER_WIDTH (mm)": 325.0,
+"PALLET_HEIGHT (mm)": 1440.0,
+"PALLET_LENGTH (mm)": 1140.0,
+"PALLET_WIDTH (mm)": 985.0,
+"ITEM_WEIGHT(KG)": 0.0231,
+"SHIPPER_WEIGHT(KG)": 5.96,
+"PALLET_WEIGHT(KG)": 205.0,
+"PALLET_UTILIZATION%_(IND)": 82.011719,
+"PALLET_UTILIZATION%_(EURO)": 102.514648,
+"LAYER_UTILIZATION%_(IND)": 92.625000,
+"LAYER_UTILIZATION%_(EURO)": 115.781250	,
+"SHIPPER_UTILIZATION%": 62.539690
+}}
+
+Here is the description and usage instructions of these columns in json format:
+[
+  {{
+    "Column Name": "SKU_CODE",
+    "Description": "Unique identifier or code for each material (Stock Keeping Unit)."
+  }},
+  {{
+    "Column Name": "SKU_DESCRIPTION",
+    "Description": "Descriptive name or label of the material."
+  }},
+  {{
+    "Column Name": "SUPPLIER",
+    "Description": "Name of the vendor or source supplying the material."
+  }},
+  {{
+    "Column Name": "LOCATION",
+    "Description": "Warehouse or distribution location where the SKU is stored."
+  }},
+  {{
+    "Column Name": "PACK_CONFIG",
+    "Description": "Packaging configuration or type for the SKU."
+  }},
+  {{
+    "Column Name": "SHIPMENT_VOLUME",
+    "Description": "Predefined volume for each sku/material."
+  }},
+  {{
+    "Column Name": "ITEMS_PER_PALLET",
+    "Description": "Number of sticks or units per pallet. It is same as 'ST/PLT'"
+  }},
+  {{
+    "Column Name": "ITEMS_PER_SHIPPER",
+    "Description": "Number of sticks or units per shipper box. It is same as 'ST/SHP'"
+  }},
+  {{
+    "Column Name": "ITEMS_PER_LAYER",
+    "Description": "Number of sticks or units per layer. It is same as 'ST/LYR'"
+  }},
+  {{
+    "Column Name": "LAYERS_PER_PALLET",
+    "Description": "Number of layers per pallet. It same as 'LYR/PLT'"
+  }},
+  {{
+    "Column Name": "SHIPPERS_PER_PALLET",
+    "Description": "Number of shipper boxes per pallet. It is same as 'SHP/PLT'"
+  }},
+  {{
+    "Column Name": "SHIPPERS_PER_LAYER",
+    "Description": "Number of shipper boxes per layer. It is same as 'SHP/LYR'"
+  }},
+  {{
+    "Column Name": "ITEM_HEIGHT(mm)",
+    "Description": "Height of a single stick or item in millimeters"
+  }},
+  {{
+    "Column Name": "ITEM_LENGTH(mm)",
+    "Usage Instructions": "Length of a single stick or item in millimeters."
+  }},
+  {{
+    "Column Name": "ITEM_WIDTH(mm)",
+    "Description": "Width of a single stick or item in millimeters."
+  }},
+  {{
+    "Column Name": "SHIPPER_HEIGHT(mm)",
+    "Description": "Height of the shipper box in millimeters."
+  }},
+  {{
+    "Column Name": "SHIPPER_LENGTH (mm)",
+    "Description": "Length of the shipper box in millimeters"
+  }},
+  {{
+    "Column Name": "SHIPPER_WIDTH (mm)",
+    "Description": "Width of the shipper box in millimeters"
+  }},
+  {{
+    "Column Name": "PALLET_HEIGHT (mm)",
+    "Description": "Height of a pallet in millimeters."
+  }},
+  {{
+    "Column Name": "PALLET_LENGTH (mm)",
+    "Description": "Length of the pallet in millimeters."
+  }},
+  {{
+    "Column Name": "PALLET_WIDTH (mm)",
+    "Description": "Width of the pallet in millimeters."
+  }},
+  {{
+    "Column Name": "ITEM_WEIGHT(KG)",
+    "Description": "Weight of a single item in kilograms"
+  }},
+  {{
+    "Column Name": "SHIPPER_WEIGHT(KG)",
+    "Description": "Total weight of a shipper box in kilograms"
+  }},
+  {{
+    "Column Name": "PALLET_WEIGHT(KG)",
+    "Description": "Total weight of a full pallet in kilograms"
+  }},
+  {{
+    "Column Name": "PALLET_UTILIZATION%_(IND)",
+    "Description": "Percentage of pallet space used (Industrial pallet)"
+  }},
+  {{
+    "Column Name": "PALLET_UTILIZATION%_(EURO)",
+    "Description": "Percentage of pallet space used (Euro pallet)"
+  }},
+  {{
+    "Column Name": "LAYER_UTILIZATION%_(IND)",
+    "Description": "Percentage of layer used (Industrial pallet)"
+  }},
+  {{
+    "Column Name": "LAYER_UTILIZATION%_(EURO)",
+    "Description": "Percentage of layer used (Euro pallet)"
+  }},
+  {{
+    "Column Name": "SHIPPER_UTILIZATION%",
+    "Description": "Volume utilization percentage of the shipper box"
+  }},
+]

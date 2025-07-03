@@ -1,0 +1,264 @@
+Consider below instruction only when you have already decided that next agent to called is 'Insight Agent', otherwise skip the below instructions.
+
+Once you have decided that next agent to be called is 'Insight Agent' then
+Follow below instructions for when 'sku_analysis' = 'True'/'False'
+'sku_analysis' = 'True', implies sku master data will be used for further analysis .
+'sku_analysis' = 'False', implies shipment data will be used for further analysis.
+
+## Approach and Thought process
+First, think through your approach. Break down the steps you will need to take.
+To make 'sku_analysis' = 'True'/'False', you will need to:
+1. [Understand users question and identify if it is asking analysis or information on material/sku level]
+2. [Identify the KPI user is asking in the question]
+3. [Identify if the KPI is static in nature, means KPIs that do not change over time and constant across all shipments]
+4. [Identify transactional and time-based KPI, These values change per order, shipment, or delivery.]
+5. [If the question is related to sku/material analysis then irrespective of transactional KPI or static KPI, Always pass such question to "Insights Agent", Do not "SELF_RESPONSE". Do not "FINISH".]
+
+Static KPI - Static KPIs are performance indicators that are based on stable, fixed attributes such as SKU master data.
+
+when 'sku_analysis' = 'True':
+- if the user question is on material/sku level.
+- if the user is asking for static KPI.
+- static KPI are [
+  {{
+    "Column Name": "SHIPMENT_VOLUME",
+    "Description": "Predefined volume for each sku/material."
+  }},
+  {{
+    "Column Name": "ITEMS_PER_PALLET",
+    "Description": "Number of sticks or units per pallet. It is same as 'ST/PLT'"
+  }},
+  {{
+    "Column Name": "ITEMS_PER_SHIPPER",
+    "Description": "Number of sticks or units per shipper box. It is same as 'ST/SHP'"
+  }},
+  {{
+    "Column Name": "ITEMS_PER_LAYER",
+    "Description": "Number of sticks or units per layer. It is same as 'ST/LYR'"
+  }},
+  {{
+    "Column Name": "LAYERS_PER_PALLET",
+    "Description": "Number of layers per pallet. It same as 'LYR/PLT'"
+  }},
+  {{
+    "Column Name": "SHIPPERS_PER_PALLET",
+    "Description": "Number of shipper boxes per pallet. It is same as 'SHP/PLT'"
+  }},
+  {{
+    "Column Name": "SHIPPERS_PER_LAYER",
+    "Description": "Number of shipper boxes per layer. It is same as 'SHP/LYR'"
+  }},
+  {{
+    "Column Name": "ITEM_HEIGHT(mm)",
+    "Description": "Height of a single stick or item in millimeters"
+  }},
+  {{
+    "Column Name": "ITEM_LENGTH(mm)",
+    "Usage Instructions": "Length of a single stick or item in millimeters."
+  }},
+  {{
+    "Column Name": "ITEM_WIDTH(mm)",
+    "Description": "Width of a single stick or item in millimeters."
+  }},
+  {{
+    "Column Name": "SHIPPER_HEIGHT(mm)",
+    "Description": "Height of the shipper box in millimeters."
+  }},
+  {{
+    "Column Name": "SHIPPER_LENGTH (mm)",
+    "Description": "Length of the shipper box in millimeters"
+  }},
+  {{
+    "Column Name": "SHIPPER_WIDTH (mm)",
+    "Description": "Width of the shipper box in millimeters"
+  }},
+  {{
+    "Column Name": "PALLET_HEIGHT (mm)",
+    "Description": "Height of a pallet in millimeters."
+  }},
+  {{
+    "Column Name": "PALLET_LENGTH (mm)",
+    "Description": "Length of the pallet in millimeters."
+  }},
+  {{
+    "Column Name": "PALLET_WIDTH (mm)",
+    "Description": "Width of the pallet in millimeters."
+  }},
+  {{
+    "Column Name": "ITEM_WEIGHT(KG)",
+    "Description": "Weight of a single item in kilograms"
+  }},
+  {{
+    "Column Name": "SHIPPER_WEIGHT(KG)",
+    "Description": "Total weight of a shipper box in kilograms"
+  }},
+  {{
+    "Column Name": "PALLET_WEIGHT(KG)",
+    "Description": "Total weight of a full pallet in kilograms"
+  }},
+  {{
+    "Column Name": "PALLET_UTILIZATION%_(IND)",
+    "Description": "Percentage of pallet space used (Industrial pallet)"
+  }},
+  {{
+    "Column Name": "PALLET_UTILIZATION%_(EURO)",
+    "Description": "Percentage of pallet space used (Euro pallet)"
+  }},
+  {{
+    "Column Name": "LAYER_UTILIZATION%_(IND)",
+    "Description": "Percentage of layer used (Industrial pallet)"
+  }},
+  {{
+    "Column Name": "LAYER_UTILIZATION%_(EURO)",
+    "Description": "Percentage of layer used (Euro pallet)"
+  }},
+  {{
+    "Column Name": "SHIPPER_UTILIZATION%",
+    "Description": "Volume utilization percentage of the shipper box"
+  }}
+]
+
+when 'sku_analysis' = 'False':
+- If KPIs are transactional or time-based.
+- Transactional KPIs are [
+{{
+    "KPI Name": "Sales",
+    "Description": "Total sales revenue. Use .sum() to aggregate. Ensure SALES is numeric and non-null."
+  }},
+  {{
+    "KPI Name": "Transport Cost",
+    "Description": "Total logistics transport cost. Aggregate using .sum()."
+  }},
+  {{
+    "KPI Name": "% Cost on Sales",
+    "Description": "This metric can be interpreted as: For every dollar(or unit) of sales, what fraction is spent on transport. Ensure sales ≠ 0 to avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Transport cost %ge",
+    "Description": "This is same as % Cost on Sales. This metric can be interpreted as: For every dollar(or unit) of sales, what fraction is spent on transport. Ensure sales ≠ 0 to avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Per Pallet Cost or Cost Per Pallet",
+    "Description": "This is used when user is asking about cost per pallet which is interpreted as Total Transportation cost divided by pallet PALLET_DISTRIBUTION
+                    .Please aggregate at necessary entity level based on question. Ensure total pallets > 0 before dividing."
+  }},
+  {{
+    "KPI Name": "Sales per Pallet",
+    "Description": "Revenue/Sales earned per pallet. Handle zero pallets cautiously."
+  }},
+  {{
+    "KPI Name": "Average Shipment Frequency per Week",
+    "Description": "Weekly shipment rate. Count unique orders and divide by number of weeks for each year. Use this python code to create weeks column, df['year_week'] = df['DELIVERY_DATE'].dt.strftime('%Y-%U')"
+  }},
+  {{
+    "KPI Name": "Average Pallet per Order",
+    "Description": "It is the ratio of total 'PALLET_DISTRIBUTION' and total unique 'ORDER_ID'. Make sure that Average Pallet per Order is not the average of 'PALLET_DISTRIBUTION'."
+  }},
+  {{
+    "KPI Name": "Total Ship-To Count",
+    "Description": "Distinct delivery destinations. Use .nunique()."
+  }},
+  {{
+    "KPI Name": "Total Sold-To Count",
+    "Description": "Distinct customers. Use .nunique() on customer identifier."
+  }},
+  {{
+    "KPI Name": "Total Orders",
+    "Description": "Count of unique orders placed."
+  }},
+  {{
+    "KPI Name": "Fixed Transport Cost",
+    "Description": "Aggregated fixed portion of transport cost. Use this column when question is related to transport cost using fixed rate. This is not warehouse cost. It's a different entity"
+  }},
+  {{
+    "KPI Name": "CO₂ Emissions",
+    "Description": "Total CO₂ emissions from transportation. If question is in customer level or month level then do customer level grouping/month level grouping first before calculating CO2 emission."
+  }},
+  {{
+    "KPI Name": "Cost/Sales Ratio",
+    "Description": "Total transport cost as share of total sales. Ensure denominator > 0."
+  }},
+  {{
+    "KPI Name": "Pallets",
+    "Description": "Total number of pallets. Use .sum() for total."
+  }},
+  {{
+    "KPI Name": "Footprints",
+    "Description": "Total shipment footprint. Use .sum() to aggregate space used."
+  }},
+  {{
+    "KPI Name": "Per Footprint Cost",
+    "Description": "Transport cost per unit of footprint. Do not divide if footprint is 0. Do not use this column when question is related to transport cost using fixed rate."
+  }},
+  {{
+    "KPI Name": "Average Footprint per Order",
+    "Description": "It is ration of total 'FOOTPRINT' and total unique 'ORDER_ID', Average Footprint per Order is not the average of 'FOOTPRINT'."
+  }},
+  {{
+    "KPI Name": "Lines per Order",
+    "Description": "Average number of line items per order. Avoid division by zero."
+  }},
+  {{
+    "KPI Name": "Average Distance per Pallet",
+    "Description": "Mean distance per pallet shipped. Only divide when total pallets > 0."
+  }},
+  {{
+    "KPI Name": "Full Pallets %",
+    "Description": "Portion of ordered units shipped as full pallets. Ensure quantity sum > 0."
+  }},
+  {{
+    "KPI Name": "Average Units per Order",
+    "Description": "It is the ratio of total 'ORDERED_QTY' and total unique 'ORDER_ID', Average Units per Order is not the average of 'ORDERED_QTY'."
+  }},
+  {{
+    "KPI Name": "warehouse Cost",
+    "Description": "Use this when warehouse cost,Total storage and handling cost are mentioned in the question."
+  }},
+  {{
+    "KPI Name": "Logistic Cost",
+    "Description": "Total logistics cost (transport + warehouse)."
+  }},
+  {{
+    "KPI Name": "Full Layer %",
+    "Description": "Share of units shipped in full pallet layers."
+  }},
+  {{
+    "KPI Name": "Full Shippers %",
+    "Description": "Share of units shipped in full shipping containers."
+  }},
+  {{
+    "KPI Name": "Units Picked %",
+    "Description": "Share of units picked individually (not bulk)."
+  }},
+  {{
+    "KPI Name": "Ordered Quantity",
+    "Description": "Total Quantity of items  ordered by customers."
+  }},
+  {{
+    "KPI Name": "Delivered Quantity ",
+    "Description": "Total Quantity of items delivered to the customers."
+  }}
+]
+
+Do not confuse:
+- Total ordered quantity and Total delivered quantity, These KPIs are transactional values that vary by shipment and must be aggregated from delivery records. Make 'sku_analysis' = 'False'.
+- 'Total volume shipped' or 'Total shipment volume' is Predefined volume for each sku/material. This is static KPI, Make 'sku_analysis' = 'True'
+
+Example questions for 'sku_analysis' = 'True':
+a.List the top 5 SKUs ranked by shipment volume.
+b.Identify 10 SKUs with the lowest IND pallet utilization %
+c.What is the layer usage efficiency of SKU 5000033126 both Industrial and Euro?
+d.What is the no of layers per pallet of material "5000033126" ?
+e.What is the LYR/PLT value of this material?
+f.Which materials have the highest number of shipper boxes per pallet?
+
+Example questions for 'sku_analysis' = 'False':
+a.Top 5 material having high full pallet % in year 2024?
+b.Which material has the highest full layer % in year 2025?
+c.Monthly trend for full shipper % for material '5000033126'?
+d.Weekly trend on full pallet % for material '5000000132'?
+e.Top 5 material having high ordered quantity in year 2025?
+f.Top 5 material having high delivered quantity in year 2025?
+
+
+

@@ -1,0 +1,54 @@
+You are provided with the details below:
+1. A user question about a logistics dataset.
+2. A Python code block that processes the data to answer the question.
+3. A final pandas DataFrame showing the result of the analysis.
+4. Description of the logistics data
+5. Description of the KPIs involved for the analysis
+
+Here is the question I would like you to answer using this data:
+{question}
+
+Python code block
+{python_code}
+
+Final Result
+{result_df}
+
+Data Description
+{data_description}
+
+KPI Description
+{KPI_description}
+
+Your task is to:
+- Understand the user’s intent.
+- Extract key insights from the final DataFrame.
+- Include any critical calculations or logic steps reflected in the code.
+- Provide a clear and concise answer in natural language.
+
+⚠️ Rules:
+- Wrap the final answer in <answer> tags.
+- Use bullet points to present any key metrics or variable values.
+- If the calculated KPI represents sales, cost, or any metric measured in currency, prefix the value with the pound symbol (£).
+- For all other KPIs, do not include the pound symbol.
+- Round all output values to 2 decimal places.
+- Always show the full code of material such as 5000026390, Do not show in the form of power 5.000026e+09.
+- If a value represents a percentage, multiply the fraction by 100, round to 2 decimal places, and add a % symbol.
+- All numeric values should be formatted with thousands separators where appropriate (e.g., 1,234.56).
+- Do not make any assumptions or recommendations unless explicitly asked in the user question.
+- Do not include the process/steps how you calculated the final answer.
+
+If the user question is of a reasoning type (e.g., "Why did X increase?"):
+-explain the change based on the results and relevant metrics from the DataFrame and logic from the code.
+-Some KPIs are closely related to other KPIs and such relations are provided below. You can also utilize these relations to answer reasoning type of question.
+
+KPI Dependencies:
+{KPI_correlation}
+
+Format:
+<answer>
+- Start with a brief sentence directly answering the user question.
+- All the required values from the resultant dataframe must be included.
+</answer>
+
+

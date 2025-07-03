@@ -1,0 +1,23 @@
+KPI 1,KPI 2,Mathematical Relationship,Logical Dependency / Effect
+Sales,Transport Cost,Independent sums: sum(SALES) and sum(TRANSPORT_COST),"Increasing sales may increase transport cost if volume/distance increases; transport cost can also vary independently (e.g., fuel price)."
+Sales,% Cost on Sales,% Cost on Sales = Transport Cost / Sales,"If Sales increases (with constant transport cost), % Cost on Sales decreases; if Sales decreases and cost stable, ratio increases."
+Sales,Transport cost %ge,Same as % Cost on Sales,Same effect as above.
+Transport Cost,% Cost on Sales,Same as above,"If transport cost increases with sales stable, % Cost on Sales increases; if transport cost decreases, ratio decreases."
+Transport Cost,Per Pallet Cost,Per Pallet Cost = Transport Cost / Pallets,Transport cost increases increases per pallet cost (assuming pallets constant); increase in pallets lowers per pallet cost if transport cost stable.
+Sales,Sales per Pallet,Sales per Pallet = Sales / Pallets,"If Sales increases (constant pallets), sales per pallet increases; increase in pallets with constant sales lowers sales per pallet."
+Pallets,Per Pallet Cost,Per Pallet Cost = Transport Cost / Pallets,Pallets increases (constant transport cost) that means per pallet cost decreases; Pallets decreases that means per pallet cost increases.
+Pallets,Sales per Pallet,Sales per Pallet = Sales / Pallets,Pallets increases (constant sales) that means sales per pallet decreases.
+Transport Cost,Logistic Cost,Logistic Cost = Transport Cost + Warehouse Cost,Transport cost increases directly increases logistic cost; warehouse cost independent.
+Warehouse Cost,Logistic Cost,See above,Warehouse cost increases increases logistic cost.
+Sales,Cost/Sales Ratio,Cost/Sales Ratio = Transport Cost / Sales,"Same as % Cost on Sales, inverse dependency on Sales, direct on Transport Cost."
+Transport Cost,Cost/Sales Ratio,See above,Direct positive effect.
+Footprints,Per Footprint Cost,Per Footprint Cost = Transport Cost / Footprints,Footprint increases (constant transport cost) that means per footprint cost decreases; transport cost increases increases per footprint cost.
+Orders,Avg Pallet per Order,Avg Pallet per Order = Pallets / Orders,Orders increases (constant pallets) that means avg pallet per order decreases; more orders with same pallets mean fewer pallets per order.
+Orders,Avg Units per Order,Avg Units per Order = Ordered Qty / Orders,Orders increases (constant quantity) that means avg units per order decreases.
+Orders,Avg Footprint per Order,Avg Footprint per Order = Footprints / Orders,Same effect as above.
+Orders,Lines per Order,Lines per Order = Materials Count / Orders,Orders increases (constant materials) that means fewer lines per order; more orders typically mean smaller individual orders.
+Avg Distance per Pallet,CO_ Emissions,CO_ proportional to distance and volume,Increasing avg distance per pallet increases CO_ emissions; also affected by number of pallets/shipment frequency.
+Delivered Quantity,Sales,Delivered Quantity ² Sales (fulfilled orders),Higher delivered quantity generally increases sales recognized (if sales are revenue from delivered goods).
+Ordered Quantity,Delivered Quantity,Delivered Quantity ² Ordered Quantity,Partial delivery reduces delivered quantity; affects sales and customer satisfaction.
+Full Pallets %,Transport Cost,More full pallets that means potentially lower cost per unit shipped,Full pallets are often more cost-efficient; higher full pallet % may reduce transport cost per unit.
+"Full Layer %, Full Shippers %, Units Picked %",Transport Cost,Different packaging types affect handling cost,Higher full layers or shippers % usually lowers cost; higher units picked % (individual handling) may increase cost.

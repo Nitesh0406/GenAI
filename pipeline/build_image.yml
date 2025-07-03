@@ -1,0 +1,38 @@
+trigger:
+  branches:
+    include:
+      - ag/build_image
+      - dev # or your preferred branch
+
+variables:
+  acrName: acrcopilotgenai        # ACR name without ".azurecr.io"
+  imageBaseName: testimage         # Name of your app/image
+  dockerfilePath: dockerfile  # Adjust if your Dockerfile is in a subfolder
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'perrigo-copilot-genai'  # Set this in your project
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      set -e
+
+      echo "Logging into Azure..."
+      az acr login --name $(acrName)
+
+      echo "Defining full image name with 'latest' tag..."
+      FULL_IMAGE_LATEST=$(acrName).azurecr.io/$(imageBaseName):latest
+
+      echo "Building Docker image..."
+      docker build -f $(dockerfilePath) -t $FULL_IMAGE_LATEST .
+
+      echo "Pushing Docker image with 'latest' tag..."
+      docker push $FULL_IMAGE_LATEST
+
+      echo "Setting output variables..."
+      echo "##vso[task.setvariable variable=imageLatestName]$FULL_IMAGE_LATEST"
+    displayName: 'Build and Push Docker Image from Dockerfile'

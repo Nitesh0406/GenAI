@@ -1,0 +1,147 @@
+Here is an example of what one row of the data looks like in json format:
+
+{{
+  "POSTCODE": "CR0 4UQ",
+  "SHORT_POSTCODE": "CR",
+  "GROWTH_SEGMENTS": "MAXIMISE PRODUCTIVITY",
+  "CUSTOMER_NAME": "DAY LEWIS MEDICAL LIMITED",
+  "SHIP_TO_NAME": "DAY LEWIS MEDICAL LIMITED",
+  "DELIVERY_DATE": "2023-05-12",
+  "ORDER_ID": 82390623.0,
+  "MATERIAL": 5000010411.0,
+  "DESCRIPTION": "NIQUITIN clr 14mg step2 7D(gls) GB",
+  "SALES": 2810.88,
+  "ORDERED_QTY": 288.0,
+  "DELIVERED_QTY": 288.0,
+  "PALLET_DISTRIBUTION": 0.3333333333,
+  "TRANSPORT_COST": 21.726238773,
+  "FIXED_COST": 33.89,
+  "FOOTPRINT": 0.1666666667,
+  "DISTANCE": 268.6,
+  "FP_UNITS": 5160.0,
+  "FL_UNITS": 4644.0,
+  "FS_UNITS": 70.0,
+  "UNITS_PICKING":4.0,
+  "SOLD_TO_CODE": 222754,
+  "SHIP_TO_CODE": 222750
+}}
+
+Here is the description and usage instructions of these columns in json format:
+[
+  {{
+    "Column Name": "POSTCODE",
+    "Description": "Full postal code of the customer's delivery location.",
+    "Usage Instructions": "Use when referencing or filtering data by the customer’s complete geographic postal zone."
+  }},
+  {{
+    "Column Name": "SHORT_POSTCODE",
+    "Description": "A shortened or truncated version of the postal code, often used for regional aggregation or clustering.",
+    "Usage Instructions": "Use for higher-level regional grouping or when detailed location isn't required."
+  }},
+  {{
+    "Column Name": "GROWTH_SEGMENTS",
+    "Description": "Classification of customers based on strategic growth categories. There is further granularity to this called 'CUSTOMER_NAME'",
+    "Usage Instructions": "Use when queries involve questions around `customer growth segment`,`customer segment` or just `segment` level."
+  }},
+  {{
+    "Column Name": "CUSTOMER_NAME",
+    "Description": "Name of the customer entity that placed the order (primary invoicing customer).",
+    "Usage Instructions": "Use when question is focused on just 'customer', not 'customer location'. Do not use this field when question is related to customer location."
+ }},
+  {{
+    "Column Name": "SHIP_TO_NAME",
+    "Description": "'SHIP_TO_NAME' is referred as `ship to location` or `Destination` or just `location`. It is most specific delivery-level customer information – includes exact name and location. Represents the actual physical point of delivery.",
+    "Usage Instructions": "Use this field when the query says “customer location” or 'ship to location' or just 'location' refers to delivery site. Do not use this field when query says only 'customer'."
+  }},
+  {{
+    "Column Name": "DELIVERY_DATE",
+    "Description": "The date on which the shipment was successfully delivered to the customer.",
+    "Usage Instructions": "Use for time-series analysis, monthly trends, seasonality, or delay measurement."
+  }},
+  {{
+    "Column Name": "ORDER_ID",
+    "Description": "Unique identifier for each order. Can repeat across rows if multiple items are part of the same order.",
+    "Usage Instructions": "Use to group order line items, or when tracking complete orders including multiple products."
+  }},
+  {{
+    "Column Name": "MATERIAL",
+    "Description": "Unique product code or SKU for the item being ordered/delivered.",
+    "Usage Instructions": "Use for material-level analysis when material code is mentioned"
+  }},
+  {{
+    "Column Name": "DESCRIPTION",
+    "Description": "Human-readable name or description of the product or material.",
+    "Usage Instructions": "Use when name of material is mentioned"
+  }},
+  {{
+    "Column Name": "SALES",
+    "Description": "Revenue value generated from the sale of the delivered material, typically in monetary units (e.g., EUR).",
+    "Usage Instructions": "Use in revenue, profitability, or pricing analysis."
+  }},
+  {{
+    "Column Name": "ORDERED_QTY",
+    "Description": "Quantity of items originally ordered by the customer.",
+    "Usage Instructions": "Use to measure demand, fulfillment performance, or compare against delivered quantity."
+  }},
+  {{
+    "Column Name": "DELIVERED_QTY",
+    "Description": "Quantity of items actually shipped and received by the customer.",
+    "Usage Instructions": "Use for calculating quantity delivered "
+  }},
+  {{
+    "Column Name": "PALLET_DISTRIBUTION",
+    "Description": "Number of pallets used for shipping this specific item in the order.",
+    "Usage Instructions": "Use when evaluating logistics volume, transport capacity, or load utilization."
+  }},
+  {{
+    "Column Name": "TRANSPORT_COST",
+    "Description": "Total transport cost incurred to deliver the specific material in the order. May vary by distance, weight, or customer terms.",
+    "Usage Instructions": "Use in all queries mentioning 'cost', 'freight', 'logistics expense', or delivery efficiency."
+  }},
+  {{
+    "Column Name": "FIXED_COST",
+    "Description": "Flat-rate transport cost, independent of quantity or distance. Defined by fixed contract terms or pricing rules.",
+    "Usage Instructions": "Use when queries refer to fixed or standard rates applied per shipment or order."
+  }},
+  {{
+    "Column Name": "FOOTPRINT",
+    "Description": "Space occupied by the shipment, generally expressed in terms of pallets. Often correlates with PALLET_DISTRIBUTION.",
+    "Usage Instructions": "Use for footprint level analysis is required instead of Pallets"
+  }},
+  {{
+    "Column Name": "DISTANCE",
+    "Description": "The physical distance (in kilometers or miles) from the warehouse to the customer location.",
+    "Usage Instructions": "Use in KPIs like C02 emission, distance travelled "
+  }},
+  {{
+    "Column Name": "FP_UNITS",
+    "Description": "Number of units that is shipped in full pallets.",
+    "Usage Instructions": "Use for questions related to full pallet units."
+  }},
+  {{
+    "Column Name": "FL_UNITS",
+    "Description": "Number of units in full layers.",
+    "Usage Instructions": "Use for questions related to full layer units."
+  }},
+  {{
+    "Column Name": "FS_UNITS",
+    "Description": "Number of units in full shippers.",
+    "Usage Instructions": "Use for questions related to full shipper units."
+  }},
+  {{
+    "Column Name": "UNITS_PICKING",
+    "Description": "Units that require individual picking (not part of full pallets or layers)",
+    "Usage Instructions": "Use for questions related number of units picked individually."
+  }},
+  {{
+    "Column Name": "SOLD_TO_CODE",
+    "Description": "A unique code assigned to each CUSTOMER_NAME, Here the data type is string",
+    "Usage Instructions": "Use it for questions related to sold to code"
+  }},
+  {{
+    "Column Name": "SHIP_TO_CODE",
+    "Description": "A unique numerical code assigned to each SHIP_TO_NAME, Here the data type is numeric",
+    "Usage Instructions": "Use it for questions related to ship to code"
+  }},
+]
+
